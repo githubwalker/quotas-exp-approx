@@ -125,17 +125,16 @@ def main():
     numpy.array(itm[1] for itm in quotas)
     y_quotas = [ itm[1] for itm in quotas ]
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+    text_pos = max(y_appr) - (max(y_appr) - min(y_appr))/10
 
-    plt.plot(x, y_quotas, 'o', label='Original data', markersize=2)
+    plt.text(1, text_pos,
+             '1 trading day discount factor = %f (%f%%)\n'
+             '250 trading days df (~1 year) = %f (%f%%)'
+             % (math.exp(a), df2percents(math.exp(a)), math.exp(250 * a), df2percents(math.exp(250 * a)))
+             )
+
+    plt.plot(x, y_quotas, 'b', label='Original data', markersize=2)
     plt.plot(x, y_appr, 'r', label='Fitted line')
-
-    ax.text(3, 8,
-            '1 trading day discount factor = %f (%f%%)\n'
-            '250 trading days df (~1 year) = %f (%f%%)'
-            % (math.exp(a), df2percents(math.exp(a)), math.exp(250*a), df2percents(math.exp(250*a))),
-            style='italic', bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 10})
 
     plt.show()
     return
