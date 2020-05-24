@@ -43,7 +43,6 @@ month2num_dict = {
     'Дек.': 11
 }
 
-#num2month_dict = {month2num_dict[k] : k for k in month2num_dict.keys()}
 
 def month2num(strmonth):
     if strmonth in month2num_dict:
@@ -92,6 +91,10 @@ def ParseCsvFile(file_name, val_name):
     return quotas
 
 
+def df2percents(df):
+    return (df-1)*100.0
+
+
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('--quotas-fname', dest='quotasfname', help='quotas filename', required=True)
@@ -122,8 +125,18 @@ def main():
     numpy.array(itm[1] for itm in quotas)
     y_quotas = [ itm[1] for itm in quotas ]
 
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
     plt.plot(x, y_quotas, 'o', label='Original data', markersize=2)
     plt.plot(x, y_appr, 'r', label='Fitted line')
+
+    ax.text(3, 8,
+            '1 trading day discount factor = %f (%f%%)\n'
+            '250 trading days df (~1 year) = %f (%f%%)'
+            % (math.exp(a), df2percents(math.exp(a)), math.exp(250*a), df2percents(math.exp(250*a))),
+            style='italic', bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 10})
+
     plt.show()
     return
 
